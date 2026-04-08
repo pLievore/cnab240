@@ -101,7 +101,7 @@ function buildCNAB240(form) {
     padLeft(stripDoc(empresa.cep || ""), 5),        // 213-217
     padRight(empresa.cepComp || "", 3),              // 218-220
     padRight(empresa.estado || "", 2),               // 221-222
-    padLeft("01", 2),                               // 223-224 indicativo
+    padLeft(loteInfo.indicativoFormaPagamento || "01", 2), // 223-224 P014
     spaces(6),                                      // 225-230
     spaces(10),                                     // 231-240
   ].join("");
@@ -397,6 +397,7 @@ const defaultEmpresa = {
 const defaultLote = {
   tipoServico: "98",
   formaLancamento: "01",
+  indicativoFormaPagamento: "01",
   mensagem: "",
 };
 
@@ -633,16 +634,27 @@ export default function App() {
               </Field>
               <Field label="Forma de Lançamento">
                 <Select value={loteInfo.formaLancamento} onChange={setLoteField("formaLancamento")} options={[
-                  { value: "01", label: "01 - Crédito em Conta Corrente" },
+                  { value: "01", label: "01 - Crédito em Conta Corrente/Salário" },
                   { value: "02", label: "02 - Cheque Pagamento/Administrativo" },
                   { value: "03", label: "03 - DOC/TED" },
                   { value: "05", label: "05 - Crédito em Conta Poupança" },
                   { value: "10", label: "10 - OP à Disposição" },
-                  { value: "11", label: "11 - Pagamento com Autenticação" },
+                  { value: "11", label: "11 - Pagto Contas/Tributos c/ Código de Barras" },
                   { value: "16", label: "16 - Tributo DARF Normal" },
-                  { value: "41", label: "41 - TED" },
-                  { value: "43", label: "43 - Pix Transferência" },
-                  { value: "45", label: "45 - Pix QR Code" },
+                  { value: "20", label: "20 - Pagamento com Autenticação" },
+                  { value: "30", label: "30 - Liquidação de Títulos do Próprio Banco" },
+                  { value: "31", label: "31 - Pagamento de Títulos de Outros Bancos" },
+                  { value: "41", label: "41 - TED – Outra Titularidade" },
+                  { value: "43", label: "43 - TED – Mesma Titularidade" },
+                  { value: "45", label: "45 - PIX Transferência" },
+                  { value: "47", label: "47 - PIX QR-CODE" },
+                ]} />
+              </Field>
+              <Field label="Indicativo Forma de Pagamento (P014)">
+                <Select value={loteInfo.indicativoFormaPagamento} onChange={setLoteField("indicativoFormaPagamento")} options={[
+                  { value: "01", label: "01 - Débito em Conta Corrente" },
+                  { value: "02", label: "02 - Débito Empréstimo/Financiamento" },
+                  { value: "03", label: "03 - Débito Cartão de Crédito" },
                 ]} />
               </Field>
               <div style={{ gridColumn: "span 2" }}>
@@ -719,12 +731,13 @@ export default function App() {
                       <Field label="Tipo Inscrição Fav.">
                         <Select value={pgt.tipoInscricaoFav} onChange={setPgtField(pgt.id, "tipoInscricaoFav")} options={[{ value: "1", label: "1 - CPF" }, { value: "2", label: "2 - CNPJ" }]} />
                       </Field>
-                      <Field label="Câmara Centralizadora">
+                      <Field label="Câmara Centralizadora (P001)">
                         <Select value={pgt.camara} onChange={setPgtField(pgt.id, "camara")} options={[
-                          { value: "000", label: "000 - Banco do Brasil / Próprio" },
-                          { value: "018", label: "018 - TED (SITRAF)" },
-                          { value: "700", label: "700 - Cheque" },
-                          { value: "888", label: "888 - Pix" },
+                          { value: "000", label: "000 - Mesmo Banco (Crédito Próprio)" },
+                          { value: "018", label: "018 - TED (STR/CIP)" },
+                          { value: "700", label: "700 - DOC (COMPE)" },
+                          { value: "988", label: "988 - TED com ISPB Obrigatório" },
+                          { value: "009", label: "009 - PIX (SPI)" },
                         ]} />
                       </Field>
                     </div>
@@ -741,11 +754,13 @@ export default function App() {
                       <Field label="Seu Número (Ref)">
                         <Input value={pgt.seuNumero} onChange={setPgtField(pgt.id, "seuNumero")} placeholder="REF-0001" />
                       </Field>
-                      <Field label="Aviso ao Favorecido">
+                      <Field label="Aviso ao Favorecido (P006)">
                         <Select value={pgt.aviso} onChange={setPgtField(pgt.id, "aviso")} options={[
-                          { value: "0", label: "0 - Não emite" },
-                          { value: "1", label: "1 - Emite aviso" },
-                          { value: "2", label: "2 - Notifica por SMS" },
+                          { value: "0", label: "0 - Não emite aviso" },
+                          { value: "2", label: "2 - Aviso somente ao remetente" },
+                          { value: "5", label: "5 - Aviso somente ao favorecido" },
+                          { value: "6", label: "6 - Aviso ao remetente e favorecido" },
+                          { value: "7", label: "7 - 2 vias remetente + aviso favorecido" },
                         ]} />
                       </Field>
                     </div>
