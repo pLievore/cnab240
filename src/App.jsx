@@ -2,6 +2,8 @@ import { AnimatePresence, motion } from "framer-motion";
 import { Toaster } from "react-hot-toast";
 import { Sparkles } from "lucide-react";
 import useCnabForm from "./hooks/useCnabForm.js";
+import useAuth from "./hooks/useAuth.js";
+import LoginPage from "./components/LoginPage.jsx";
 import Header from "./components/layout/Header.jsx";
 import Sidebar from "./components/layout/Sidebar.jsx";
 import Stepper from "./components/layout/Stepper.jsx";
@@ -18,7 +20,21 @@ const tabVariants = {
 };
 
 export default function App() {
+  const auth = useAuth();
   const form = useCnabForm();
+
+  if (!auth.authed) {
+    return (
+      <>
+        <Toaster position="top-right" />
+        <LoginPage
+          onSubmit={auth.login}
+          loading={auth.loading}
+          error={auth.error}
+        />
+      </>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-zinc-950 text-zinc-300">
@@ -41,9 +57,8 @@ export default function App() {
         empresa={form.empresa}
         pagamentos={form.pagamentos}
         totalValor={form.totalValor}
-        darkMode={form.darkMode}
-        onToggleTheme={form.setDarkMode}
         onToggleSidebar={() => form.setSidebarOpen(true)}
+        onLogout={auth.logout}
       />
 
       <div className="flex">

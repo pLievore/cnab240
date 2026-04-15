@@ -1,17 +1,13 @@
 import { motion } from "framer-motion";
-import { Sun, Moon, Menu } from "lucide-react";
+import { Menu, LogOut } from "lucide-react";
 import { Badge } from "../ui/index.js";
 
-/**
- * @param {{ empresa: object, pagamentos: Array, totalValor: number, darkMode: boolean, onToggleTheme: () => void, onToggleSidebar: () => void }} props
- */
 export default function Header({
   empresa,
   pagamentos,
   totalValor,
-  darkMode,
-  onToggleTheme,
   onToggleSidebar,
+  onLogout,
 }) {
   return (
     <header className="sticky top-0 z-40 glass border-b border-zinc-800/60">
@@ -62,16 +58,18 @@ export default function Header({
           <Badge color="emerald">REMESSA</Badge>
         </div>
 
-        {/* Theme toggle */}
-        <motion.button
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
-          onClick={onToggleTheme}
-          className="p-2 rounded-lg bg-zinc-800/50 border border-zinc-700/50 hover:border-zinc-600
-            text-zinc-400 hover:text-zinc-200 transition-all ml-2"
-        >
-          {darkMode ? <Sun size={16} /> : <Moon size={16} />}
-        </motion.button>
+        {onLogout && (
+          <motion.button
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            onClick={onLogout}
+            title="Sair"
+            className="p-2 rounded-lg bg-zinc-800/50 border border-zinc-700/50 hover:border-red-600/60
+              text-zinc-400 hover:text-red-400 transition-all ml-2"
+          >
+            <LogOut size={16} />
+          </motion.button>
+        )}
       </div>
 
       {/* Mobile status */}

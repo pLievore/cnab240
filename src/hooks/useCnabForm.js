@@ -11,7 +11,6 @@ export default function useCnabForm() {
   const [expanded, setExpanded] = useState({});
   const [lines, setLines] = useState([]);
   const [generated, setGenerated] = useState(false);
-  const [darkMode, setDarkMode] = useState(true);
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [hasUnsavedData, setHasUnsavedData] = useState(false);
 
@@ -32,11 +31,6 @@ export default function useCnabForm() {
     window.addEventListener("beforeunload", handler);
     return () => window.removeEventListener("beforeunload", handler);
   }, [hasUnsavedData]);
-
-  // Theme management
-  useEffect(() => {
-    document.body.classList.toggle("light", !darkMode);
-  }, [darkMode]);
 
   const setEmpField = (k) => (v) => setEmpresa((p) => ({ ...p, [k]: v }));
   const setLoteField = (k) => (v) => setLoteInfo((p) => ({ ...p, [k]: v }));
@@ -156,7 +150,6 @@ export default function useCnabForm() {
     expanded, toggleExpanded,
     lines, generated, generate, download, copyToClipboard,
     totalValor,
-    darkMode, setDarkMode: () => setDarkMode((d) => !d),
     sidebarOpen, setSidebarOpen,
     completedSteps, errorSteps,
     fillSampleData,
