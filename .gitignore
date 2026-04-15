@@ -4,3 +4,6 @@ dist/
 .env.local
 .DS_Store
 .claude/
+.vite/
+*.pdf
+backend/data/files/*.rem
