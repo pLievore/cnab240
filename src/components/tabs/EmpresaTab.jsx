@@ -1,30 +1,28 @@
 import { Building2, MapPin } from "lucide-react";
 import { Card, Input, Select } from "../ui/index.js";
-import { getBankName } from "../../utils/banks.js";
+import { bankOptions, getBankName } from "../../utils/banks.js";
 import { tipoInscricaoOptions, tooltips } from "../../utils/constants.js";
 
 /**
  * @param {{ empresa: object, setEmpField: (k: string) => (v: string) => void }} props
  */
 export default function EmpresaTab({ empresa, setEmpField }) {
-  const bankName = getBankName(empresa.codigoBanco);
+  const handleBankChange = (code) => {
+    setEmpField("codigoBanco")(code);
+    const name = getBankName(code);
+    if (name) setEmpField("nomeBanco")(name.slice(0, 30));
+  };
 
   return (
     <div className="space-y-6">
       <Card title="Dados da Empresa (Pagadora)" icon={<Building2 size={16} />}>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-4">
-          <div>
-            <Input
-              label="Codigo do Banco"
-              value={empresa.codigoBanco}
-              onChange={setEmpField("codigoBanco")}
-              placeholder="001"
-              mask="banco"
-            />
-            {bankName && (
-              <p className="text-[10px] text-emerald-500/70 mt-1 font-mono truncate">{bankName}</p>
-            )}
-          </div>
+          <Select
+            label="Banco"
+            value={empresa.codigoBanco}
+            onChange={handleBankChange}
+            options={bankOptions}
+          />
           <Select
             label="Tipo de Inscricao"
             value={empresa.tipoInscricao}

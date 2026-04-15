@@ -180,3 +180,7 @@ export function getBankName(code) {
   const padded = code.padStart(3, "0");
   return bankCodes[padded] || null;
 }
+
+export const bankOptions = Object.entries(bankCodes)
+  .map(([value, name]) => ({ value, label: `${value} - ${name}` }))
+  .sort((a, b) => a.value.localeCompare(b.value));
