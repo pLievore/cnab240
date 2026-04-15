@@ -1,0 +1,6 @@
+============================================================================================================================
+Linha 1, Header de arquivo, colunas 058 a 058, Dígito da agência inválido.
+Linha 1, Header de Arquivo, colunas 071 a 071, dígito da conta-corrente inválido.
+Linha 2, Header de lote, colunas 014 a 016, nº versão do layout inválida para forma de lançamento 41-TED outra titularidade.
+Linha 2, Header de lote, colunas 058 a 058, Dígito da agência inválido.
+Linha 2, Header de lote, colunas 071 a 071, dígito da conta-corrente inválido.
